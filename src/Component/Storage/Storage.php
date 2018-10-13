@@ -6,9 +6,8 @@
  * Time: 01:43
  */
 
-namespace App\Component;
+namespace App\Component\Storage;
 
-use App\Component\StorageInterface;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -37,7 +36,7 @@ class Storage implements StorageInterface
     /**
      * @var string
      */
-    private $baseDir = __DIR__ . '/../../data/';
+    private $baseDir = __DIR__ . '/../../../data/';
 
     public function add(array $entry): StorageInterface
     {
@@ -93,7 +92,6 @@ class Storage implements StorageInterface
         }
 
         $contents = $this->filesystem->read($this->databaseFile);
-
         $this->collection = $this->collection + json_decode($contents, true);
     }
 }

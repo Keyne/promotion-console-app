@@ -14,12 +14,13 @@ use App\Command\Step\CommandStepInterface;
 use App\Command\Step\UserManagementStep;
 use App\Command\Step\WinnerByCountryStep;
 use App\Command\Step\WinnerStep;
-use App\Component\CsvFinder;
-use App\Component\CsvReader;
-use App\Component\CsvFinderInterface;
-use App\Component\CsvReaderInterface;
-use App\Component\StorageInterface;
-use App\Component\Storage;
+use App\Component\AppConfigInterface as Config;
+use App\Component\Csv\CsvFinder;
+use App\Component\Csv\CsvReader;
+use App\Component\Csv\CsvFinderInterface;
+use App\Component\Csv\CsvReaderInterface;
+use App\Component\Storage\StorageInterface;
+use App\Component\Storage\Storage;
 use App\Factory\Interfaces\CommandFactoryInterface;
 use Symfony\Component\Console\Command\Command;
 
@@ -29,6 +30,16 @@ class CommandFactory implements CommandFactoryInterface
      * @var StorageInterface
      */
     private $storage;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    public function __construct()
+    {
+        $this->config = include dirname(__FILE__) . '/../../config/config.php';
+    }
 
     public function create(): Command
     {
@@ -44,7 +55,8 @@ class CommandFactory implements CommandFactoryInterface
 
     private function createFileChoiceStep(): CommandStepInterface
     {
-        $step = new FileChoiceStep($this->createCsvFinder(), $this->createCsvReader(), $this->createStorage());
+        $dataColumns = include(dirname(__FILE__) . "/../../config/data-columns.config.php");;
+        $step = new FileChoiceStep($dataColumns, $this->config[Config::DEFAULT_BASE_DIR], $this->createCsvFinder(), $this->createCsvReader(), $this->createStorage());
         return $step;
     }
 
@@ -62,7 +74,8 @@ class CommandFactory implements CommandFactoryInterface
 
     private function createUserManagementStep(): CommandStepInterface
     {
-        $step = new UserManagementStep($this->createStorage());
+        $dataColumns = include(dirname(__FILE__) . "/../../config/data-columns.config.php");;
+        $step = new UserManagementStep($this->createStorage(), $dataColumns);
         return $step;
     }
 

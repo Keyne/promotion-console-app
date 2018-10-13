@@ -9,13 +9,10 @@
 namespace App\Command\Step;
 
 use App\Command\Exception\AlertMessageException;
-use App\Component\EmailValidator;
-use App\Component\RegexValidator;
-use App\Component\StorageInterface;
+use App\Component\Storage\StorageInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
 
 class UserManagementStep extends AbstractStep
 {
@@ -38,13 +35,19 @@ class UserManagementStep extends AbstractStep
     ];
 
     /**
+     * @var array
+     */
+    private $formFields;
+
+    /**
      * @var StorageInterface
      */
     private $storage;
 
-    public function __construct(StorageInterface $storage)
+    public function __construct(StorageInterface $storage, array $formFields)
     {
         $this->storage = $storage;
+        $this->formFields = $formFields;
     }
 
     public function execute(): void
@@ -88,17 +91,7 @@ class UserManagementStep extends AbstractStep
 
     private function runNewUserStep(): void
     {
-        $fields = [
-          ['label' => 'ID (Ex: "1234-567")', 'name' => 'id', 'validator' => new RegexValidator('/[0-9]+-[0-9]+/')],
-          ['label' => 'First name', 'name' => 'first_name', 'validator' => null],
-          ['label' => 'Email', 'name' => 'email', 'validator' => new EmailValidator()],
-          ['label' => 'Country code (Ex format: Uppercase "BR")', 'name' => 'country', 'validator' => new RegexValidator('/[A-Z]{2}/')],
-          ['label' => 'Latitude (Ex format: "13.5936457")', 'name' => 'latitude', 'validator' => new RegexValidator('/-?[0-9]+(\.[0-9]+)?/')],
-          ['label' => 'Longitude', 'name' => 'longitude', 'validator' => new RegexValidator('/[0-9]+\.[0-9]+/')],
-          ['label' => 'Date (Ex format: "2018-03-10T12:45:57Z")', 'name' => 'Date Joined', 'validator' => new RegexValidator('/[0-9]{4}-[0-9]{2}-[0-9]{2} ?T?([0-9]{2})?:([0-9]{2})?([0-9]{2})?Z?/')],
-        ];
-
-        $formStep = new FormStep($fields, $this->storage);
+        $formStep = new FormStep($this->formFields, $this->storage);
         $formStep
             ->setOutput($this->getOutput())
             ->setInput($this->getInput())

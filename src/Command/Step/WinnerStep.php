@@ -8,7 +8,8 @@
 
 namespace App\Command\Step;
 
-use App\Component\StorageInterface;
+use App\Component\Storage\StorageInterface;
+use App\Component\Winner;
 
 class WinnerStep extends AbstractStep
 {
@@ -31,8 +32,28 @@ class WinnerStep extends AbstractStep
             throw new \LengthException('Users database is empty, please load a CSV file first');
         }
 
-        $lastIndex = $total -1;
-        $winner = rand(0, $lastIndex);
-        $this->getOutput()->writeln("The winner is: {$users[$winner]['first_name']} (id: {$users[$winner]['id']})");
+        $this->getOutput()->writeln('
+-----------------------------------------------------------------------
+        ');
+        $this->getOutput()->writeln("<question>
+            )                  (        )     )       (      (    (      
+  *   )  ( /(        (  (      )\\ )  ( /(  ( /(       )\\ )   )\\ ) )\\ )   
+` )  /(  )\\()) (     )\\))(   '(()/(  )\\()) )\\()) (   (()/(  (()/((()/(   
+ ( )(_))((_)\\  )\\   ((_)()\\ )  /(_))((_)\\ ((_)\\  )\\   /(_))  /(_))/(_))  
+(_(_())  _((_)((_)  _(())\\_)()(_))   _((_) _((_)((_) (_))   (_)) (_))    
+|_   _| | || || __| \\ \\((_)/ /|_ _| | \\| || \\| || __|| _ \\  |_ _|/ __|   
+  | |   | __ || _|   \\ \\/\\/ /  | |  | .` || .` || _| |   /   | | \\__ \\   
+  |_|   |_||_||___|   \\_/\\_/  |___| |_|\\_||_|\\_||___||_|_\\  |___||___/   
+</question>                                                                                
+        ");
+
+        $winner = new Winner();
+        $winner->setDataTable($users);
+        $winnerUser = $winner->getWinner();
+        $this->getOutput()->writeln("The winner is: {$winnerUser['first_name']} (id: {$winnerUser['id']})");
+
+        $this->getOutput()->writeln('
+-----------------------------------------------------------------------
+        ');
     }
 }

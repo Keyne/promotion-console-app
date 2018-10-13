@@ -6,7 +6,7 @@
  * Time: 22:37
  */
 
-namespace App\Component;
+namespace App\Component\Validator;
 
 interface StringValidatorInterface
 {

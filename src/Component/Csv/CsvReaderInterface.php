@@ -6,7 +6,7 @@
  * Time: 21:35
  */
 
-namespace App\Component;
+namespace App\Component\Csv;
 
 interface CsvReaderInterface
 {

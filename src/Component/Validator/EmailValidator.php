@@ -6,9 +6,8 @@
  * Time: 22:40
  */
 
-namespace App\Component;
+namespace App\Component\Validator;
 
-use App\Component\StringValidatorInterface;
 use EmailValidator\Validator;
 
 class EmailValidator extends Validator implements StringValidatorInterface

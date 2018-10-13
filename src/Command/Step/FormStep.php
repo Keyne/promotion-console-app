@@ -8,9 +8,10 @@
 
 namespace App\Command\Step;
 
-use App\Component\StorageInterface;
-use App\Component\StringValidatorInterface;
+use App\Component\Storage\StorageInterface;
+use App\Component\Validator\StringValidatorInterface;
 use Symfony\Component\Console\Question\Question;
+use App\Component\DataColumnInterface as ColumnFeature;
 
 class FormStep extends AbstractStep
 {
@@ -43,16 +44,16 @@ class FormStep extends AbstractStep
         foreach ($this->fields as $field) {
             while (true) {
                 try {
-                    if (empty($field['label'])) {
+                    if (empty($field[ColumnFeature::LABEL])) {
                         throw new \RuntimeException('Field label not set');
                     }
-                    $fieldLabel = isset($field['label']) ? $field['label'] : 'undefined';
+                    $fieldLabel = isset($field[ColumnFeature::LABEL]) ? $field[ColumnFeature::LABEL] : 'undefined';
                     if (empty($field['name'])) {
                         throw new \RuntimeException('Field name not set');
                     }
                     $fieldName = $field['name'];
 
-                    $validator = isset($field['validator']) && $field['validator'] instanceof StringValidatorInterface ? $field['validator'] : false;
+                    $validator = isset($field[ColumnFeature::VALIDATOR]) && $field[ColumnFeature::VALIDATOR] instanceof StringValidatorInterface ? $field[ColumnFeature::VALIDATOR] : false;
                     $question = new Question($fieldLabel . ': ');
                     $value = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
 

@@ -6,9 +6,8 @@
  * Time: 21:35
  */
 
-namespace App\Component;
+namespace App\Component\Csv;
 
-use App\Component\CsvFinderInterface;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 

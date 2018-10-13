@@ -6,9 +6,8 @@
  * Time: 00:55
  */
 
-namespace App\Component;
+namespace App\Component\Csv;
 
-use App\Component\CsvReaderInterface;
 use League\Csv\Reader;
 
 class CsvReader implements CsvReaderInterface
@@ -29,6 +28,7 @@ class CsvReader implements CsvReaderInterface
     {
         $records = $this->csv->getRecords();
         $recordsArr = [];
+
         foreach ($records as $record) {
             $recordsArr[] = $record;
         }

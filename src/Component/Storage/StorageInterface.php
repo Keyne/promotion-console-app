@@ -6,7 +6,7 @@
  * Time: 01:41
  */
 
-namespace App\Component;
+namespace App\Component\Storage;
 
 interface StorageInterface
 {

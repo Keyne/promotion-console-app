@@ -8,7 +8,8 @@
 
 namespace App\Command\Step;
 
-use App\Component\StorageInterface;
+use App\Component\Storage\StorageInterface;
+use App\Component\Winner;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class WinnerByCountryStep extends AbstractStep
@@ -52,8 +53,29 @@ class WinnerByCountryStep extends AbstractStep
             return;
         }
 
-        $lastIndex = $countryTotal -1;
-        $winner = rand(0, $lastIndex);
-        $this->getOutput()->writeln("The winner for {$countryCode} is: {$users[$winner]['first_name']} (id: {$users[$winner]['id']})");
+        // TODO: Move drawings to a view layer
+        $this->getOutput()->writeln('
+-----------------------------------------------------------------------
+        ');
+        $this->getOutput()->writeln("<question>
+            )                  (        )     )       (      (    (      
+  *   )  ( /(        (  (      )\\ )  ( /(  ( /(       )\\ )   )\\ ) )\\ )   
+` )  /(  )\\()) (     )\\))(   '(()/(  )\\()) )\\()) (   (()/(  (()/((()/(   
+ ( )(_))((_)\\  )\\   ((_)()\\ )  /(_))((_)\\ ((_)\\  )\\   /(_))  /(_))/(_))  
+(_(_())  _((_)((_)  _(())\\_)()(_))   _((_) _((_)((_) (_))   (_)) (_))    
+|_   _| | || || __| \\ \\((_)/ /|_ _| | \\| || \\| || __|| _ \\  |_ _|/ __|   
+  | |   | __ || _|   \\ \\/\\/ /  | |  | .` || .` || _| |   /   | | \\__ \\   
+  |_|   |_||_||___|   \\_/\\_/  |___| |_|\\_||_|\\_||___||_|_\\  |___||___/   
+</question>                                                                                
+        ");
+
+        $winner = new Winner();
+        $winner->setDataTable($users);
+        $winnerUser = $winner->getWinnerByColumn('country', $countryCode);
+        $this->getOutput()->writeln("The winner for {$countryCode} is: {$winnerUser['first_name']} (id: {$winnerUser['id']})");
+
+        $this->getOutput()->writeln('
+-----------------------------------------------------------------------
+        ');
     }
 }

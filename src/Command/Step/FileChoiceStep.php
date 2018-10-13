@@ -8,13 +8,13 @@
 
 namespace App\Command\Step;
 
-use App\Component\EmailValidator;
-use App\Component\CsvFinderInterface;
-use App\Component\CsvReaderInterface;
-use App\Component\StorageInterface;
-use App\Component\StringValidatorInterface;
+use App\Component\DataColumnInterface as ColumnFeature;
+use App\Component\Validator\EmailValidator;
+use App\Component\Csv\CsvFinderInterface;
+use App\Component\Csv\CsvReaderInterface;
+use App\Component\Storage\StorageInterface;
+use App\Component\Validator\StringValidatorInterface;
 use EmailValidator\Validator;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
@@ -36,12 +36,24 @@ class FileChoiceStep extends AbstractStep
     private $storage;
 
     /**
+     * @var string
+     */
+    private $defaultBaseDir;
+
+    /**
+     * @var array
+     */
+    private $dataColumns;
+
+    /**
      * @var StringValidatorInterface
      */
     private $emailValidator;
 
-    public function __construct(CsvFinderInterface $csvFinder, CsvReaderInterface $csvReader, StorageInterface $storage)
+    public function __construct(array $dataColumns, $defaultBaseDir, CsvFinderInterface $csvFinder, CsvReaderInterface $csvReader, StorageInterface $storage)
     {
+        $this->dataColumns = $dataColumns;
+        $this->defaultBaseDir = $defaultBaseDir;
         $this->csvFinder = $csvFinder;
         $this->csvReader = $csvReader;
         $this->storage = $storage;
@@ -67,7 +79,7 @@ class FileChoiceStep extends AbstractStep
     {
         while (true) {
             try {
-                $defaultDir = realpath('../');
+                $defaultDir = realpath($this->defaultBaseDir);
                 $question = new Question("Please enter the the directory in which CSV files are stored (default: {$defaultDir}): ", $defaultDir);
                 $dir = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
                 $this->getOutput()->writeln("Selected directory: {$dir}");
@@ -112,13 +124,22 @@ class FileChoiceStep extends AbstractStep
         $this->getOutput()->writeln('Saving users...');
 
         $counter = 0;
+
         foreach ($this->csvReader->getEntriesAsArray() as $k => $user) {
-            while (!$this->getEmailValidator()->isValid($user['email'])) {
-                $user = $this->askRetypeEmail($k, $user);
+            while(true) {
+                while (!$this->getEmailValidator()->isValid($user['email'])) {
+                    $user = $this->askRetypeEmail($k, $user);
+                }
+
+                $validatorKey = array_search($k, array_column($this->dataColumns, 'name'));
+
+                if ($validatorKey[$validatorKey][ColumnFeature::VALIDATOR])
+
+                $this->storage->add($user);
+                $counter++;
+                break;
             }
 
-            $this->storage->add($user);
-            $counter++;
         }
         $this->getOutput()->writeln("{$counter} users processed");
         $this->storage->save();

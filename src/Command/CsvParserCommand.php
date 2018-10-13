@@ -95,14 +95,14 @@ class CsvParserCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('####################################');
-        $output->writeln('####### CONSOLE CSV SORTABLE #######');
-        $output->writeln('####################################');
-        $output->writeln('');
-        $output->writeln('');
-
         do {
             try {
+                $output->writeln('####################################');
+                $output->writeln('####### CONSOLE CSV SORTABLE #######');
+                $output->writeln('####################################');
+                $output->writeln('');
+                $output->writeln('');
+
                 $shouldRunAgain = $this->start($input, $output);
             } catch (\Exception $e) {
                 $output->writeln(
