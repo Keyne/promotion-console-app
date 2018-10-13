@@ -8,7 +8,6 @@
 
 namespace App\Command\Step;
 
-
 use App\Component\StorageInterface;
 use App\Component\StringValidatorInterface;
 use Symfony\Component\Console\Question\Question;
@@ -42,13 +41,13 @@ class FormStep extends AbstractStep
     {
         $inputs = [];
         foreach ($this->fields as $field) {
-            while(true) {
+            while (true) {
                 try {
-                    if (empty($fieldName['label'])) {
+                    if (empty($field['label'])) {
                         throw new \RuntimeException('Field label not set');
                     }
                     $fieldLabel = isset($field['label']) ? $field['label'] : 'undefined';
-                    if (empty($fieldName['name'])) {
+                    if (empty($field['name'])) {
                         throw new \RuntimeException('Field name not set');
                     }
                     $fieldName = $field['name'];
@@ -60,12 +59,14 @@ class FormStep extends AbstractStep
                     /**
                      * @var StringValidatorInterface|bool $validator
                      */
-                    if (($validator && $validator->isValid($value)) || !empty($value)) {
+                    if (!empty($value)) {
+                        if (($validator && !$validator->isValid($value))) {
+                            throw new \InvalidArgumentException('It looks like you\'ve typed a invalid value');
+                        }
                         $inputs[$fieldName] = $value;
                         break;
-                    } else {
-                        $this->getOutput()->writeln('It looks like you\'ve typed a wrong value');
                     }
+                    $this->getOutput()->writeln('Please fill the field correctly');
                 } catch (\InvalidArgumentException $e) {
                     $this->getOutput()->writeln($e->getMessage());
                 }
@@ -73,5 +74,10 @@ class FormStep extends AbstractStep
         }
         $this->storage->add($inputs);
         $this->storage->save();
+        $this->getOutput()->writeln('#####################');
+        $this->getOutput()->writeln('####### SAVED #######');
+        $this->getOutput()->writeln('#####################');
+        $this->getOutput()->writeln('');
+        $this->getOutput()->writeln('');
     }
 }

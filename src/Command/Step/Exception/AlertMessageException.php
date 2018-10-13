@@ -8,7 +8,6 @@
 
 namespace App\Command\Exception;
 
-
 class AlertMessageException extends \DomainException
 {
 

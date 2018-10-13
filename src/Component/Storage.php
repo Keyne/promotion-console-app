@@ -41,7 +41,13 @@ class Storage implements StorageInterface
 
     public function add(array $entry): StorageInterface
     {
-        $this->collection[] = $entry;
+        $id = array_search($entry['id'], array_column($this->collection, 'id'));
+        if ($id !== false) {
+            $this->collection[$id] = $entry;
+        } else {
+            $this->collection[] = $entry;
+        }
+
         return $this;
     }
 
@@ -80,10 +86,10 @@ class Storage implements StorageInterface
     private function loadJsonFile(): void
     {
         $adapter = new Local($this->baseDir);
-        $this->filesystem = new Filesystem($adapter, ['visibility' => 'public']);
+        $this->filesystem = new Filesystem($adapter);
 
         if (!$this->filesystem->has($this->databaseFile)) {
-            $this->filesystem->put($this->databaseFile, '{}');
+            $this->filesystem->put($this->databaseFile, '[]');
         }
 
         $contents = $this->filesystem->read($this->databaseFile);

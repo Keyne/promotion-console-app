@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 interface StorageInterface
 {
     public function add(array $entry): StorageInterface;

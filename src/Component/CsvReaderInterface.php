@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 interface CsvReaderInterface
 {
     public function setCsv(string $file): CsvReaderInterface;

@@ -73,7 +73,7 @@ class UserManagementStep extends AbstractStep
             if (!$exit) {
                 break;
             }
-        } while(true);
+        } while (true);
     }
 
     private function runListStep(): void
@@ -89,16 +89,21 @@ class UserManagementStep extends AbstractStep
     private function runNewUserStep(): void
     {
         $fields = [
-          ['label' => 'ID', 'name' => 'id', 'validator' => new RegexValidator('/[0-9]+-[0-9]+/')],
+          ['label' => 'ID (Ex: "1234-567")', 'name' => 'id', 'validator' => new RegexValidator('/[0-9]+-[0-9]+/')],
           ['label' => 'First name', 'name' => 'first_name', 'validator' => null],
           ['label' => 'Email', 'name' => 'email', 'validator' => new EmailValidator()],
           ['label' => 'Country code (Ex format: Uppercase "BR")', 'name' => 'country', 'validator' => new RegexValidator('/[A-Z]{2}/')],
-          ['label' => 'Latitude (Ex format: "13.5936457")', 'name' => 'latitude', 'validator' => new RegexValidator('/[0-9]+\.[0-9]+/')],
-          ['label' => 'Longitude', 'name' => 'longitude', 'validator' => new RegexValidator('/[A-Z]{2}/')],
-          ['label' => 'Date (Ex format: "2018-03-10T12:45:57Z")', 'name' => 'Date Joined', 'validator' => new RegexValidator('/[0-9]{4}-[0-9]{2}-[0-9]{2}T?[0-9]{2}?:[0-9]{2}?[0-9]{2}?/')],
+          ['label' => 'Latitude (Ex format: "13.5936457")', 'name' => 'latitude', 'validator' => new RegexValidator('/-?[0-9]+(\.[0-9]+)?/')],
+          ['label' => 'Longitude', 'name' => 'longitude', 'validator' => new RegexValidator('/[0-9]+\.[0-9]+/')],
+          ['label' => 'Date (Ex format: "2018-03-10T12:45:57Z")', 'name' => 'Date Joined', 'validator' => new RegexValidator('/[0-9]{4}-[0-9]{2}-[0-9]{2} ?T?([0-9]{2})?:([0-9]{2})?([0-9]{2})?Z?/')],
         ];
 
         $formStep = new FormStep($fields, $this->storage);
+        $formStep
+            ->setOutput($this->getOutput())
+            ->setInput($this->getInput())
+            ->setQuestionHelper($this->getQuestionHelper())
+        ;
         $formStep->execute();
     }
 }

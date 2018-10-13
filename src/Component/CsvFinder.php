@@ -47,7 +47,6 @@ class CsvFinder implements CsvFinderInterface
 
         $this->files = [];
         foreach ($contents as $object) {
-
             if ($object['type'] === 'file') {
                 $this->addFile($object['basename']);
             }

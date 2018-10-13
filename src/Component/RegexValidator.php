@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 use App\Component\StringValidatorInterface;
 use EmailValidator\Validator;
 

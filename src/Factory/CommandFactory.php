@@ -8,7 +8,6 @@
 
 namespace App\Factory;
 
-
 use App\Command\CsvParserCommand;
 use App\Command\Step\FileChoiceStep;
 use App\Command\Step\CommandStepInterface;
@@ -26,6 +25,11 @@ use Symfony\Component\Console\Command\Command;
 
 class CommandFactory implements CommandFactoryInterface
 {
+    /**
+     * @var StorageInterface
+     */
+    private $storage;
+
     public function create(): Command
     {
         $command = new CsvParserCommand();
@@ -76,7 +80,10 @@ class CommandFactory implements CommandFactoryInterface
 
     private function createStorage(): StorageInterface
     {
-        $storage = new Storage();
-        return $storage;
+        if ($this->storage instanceof StorageInterface) {
+            return $this->storage;
+        }
+        $this->storage = new Storage();
+        return $this->storage;
     }
 }

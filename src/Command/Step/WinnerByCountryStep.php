@@ -8,7 +8,6 @@
 
 namespace App\Command\Step;
 
-
 use App\Component\StorageInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 

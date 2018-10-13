@@ -58,15 +58,14 @@ class FileChoiceStep extends AbstractStep
             } catch (\InvalidArgumentException $e) {
                 $this->getOutput()->writeln($e->getMessage());
             }
-
-        } while(true);
+        } while (true);
 
         $this->save();
     }
 
     private function askDir(): void
     {
-        while(true) {
+        while (true) {
             try {
                 $defaultDir = realpath('../');
                 $question = new Question("Please enter the the directory in which CSV files are stored (default: {$defaultDir}): ", $defaultDir);
@@ -111,24 +110,23 @@ class FileChoiceStep extends AbstractStep
     private function save(): void
     {
         $this->getOutput()->writeln('Saving users...');
-        $this->getOutput()->writeln('------------------ START ---------------------');
 
         $counter = 0;
-        foreach ($this->csvReader->getEntriesAsArray() as $k => $user)
-        {
+        foreach ($this->csvReader->getEntriesAsArray() as $k => $user) {
             while (!$this->getEmailValidator()->isValid($user['email'])) {
                 $user = $this->askRetypeEmail($k, $user);
             }
 
             $this->storage->add($user);
-            //$this->getOutput()->writeln("{$k}) " . json_encode($user));
             $counter++;
         }
         $this->getOutput()->writeln("{$counter} users processed");
-        $this->getOutput()->writeln('------------------- END ----------------------');
-
         $this->storage->save();
-        $this->getOutput()->writeln('Saved');
+        $this->getOutput()->writeln('#####################');
+        $this->getOutput()->writeln('####### SAVED #######');
+        $this->getOutput()->writeln('#####################');
+        $this->getOutput()->writeln('');
+        $this->getOutput()->writeln('');
     }
 
     /**

@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 interface CsvFinderInterface
 {
     public function setCsvDir(string $dir): CsvFinderInterface;

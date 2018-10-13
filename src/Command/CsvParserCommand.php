@@ -95,9 +95,24 @@ class CsvParserCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $output->writeln('####################################');
+        $output->writeln('####### CONSOLE CSV SORTABLE #######');
+        $output->writeln('####################################');
+        $output->writeln('');
+        $output->writeln('');
+
         do {
-            $shouldRunAgain = $this->start($input, $output);
-        } while($shouldRunAgain);
+            try {
+                $shouldRunAgain = $this->start($input, $output);
+            } catch (\Exception $e) {
+                $output->writeln(
+                    'Ops! There was a internal error. This is still a beta version, please contact keyneviana at gmail dot com and provide the following log:'
+                    . PHP_EOL
+                    . $e->getMessage()
+                );
+                $shouldRunAgain = true;
+            }
+        } while ($shouldRunAgain);
     }
 
     private function start(InputInterface $input, OutputInterface $output): bool
