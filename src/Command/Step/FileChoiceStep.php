@@ -111,9 +111,9 @@ class FileChoiceStep extends AbstractStep
         $this->getOutput()->writeln("Selected file: {$file}");
     }
 
-    private function askRetypeEmail(int $position, array $user): array
+    private function askRetype(string $column, array $user): array
     {
-        $question = new Question("{$position}) Please retype {$user['first_name']}'s e-mail ({$user['email']}) it looks invalid': ");
+        $question = new Question("Please retype {$user['first_name']}'s data: \"{$user[$column]}\" looks invalid': ");
         $user['email'] = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
 
         return $user;
@@ -127,16 +127,22 @@ class FileChoiceStep extends AbstractStep
 
         foreach ($this->csvReader->getEntriesAsArray() as $k => $user) {
             while(true) {
-                while (!$this->getEmailValidator()->isValid($user['email'])) {
-                    $user = $this->askRetypeEmail($k, $user);
+                foreach ($user as $column => $value) {
+                    $validatorKey = array_search($column, array_column($this->dataColumns, 'name'));
+
+                    if (!isset($this->dataColumns[$validatorKey])) {
+                        throw new \RuntimeException("Unable to get field by column: [$validatorKey][$column]");
+                    }
+
+                    $validator = $this->dataColumns[$validatorKey][ColumnFeature::VALIDATOR];
+                    if ($validator instanceof StringValidatorInterface) {
+                        while (!$validator->isValid($user[$column])) {
+                            $user = $this->askRetype($column, $user);
+                        }
+                    }
+                    $counter++;
                 }
-
-                $validatorKey = array_search($k, array_column($this->dataColumns, 'name'));
-
-                if ($validatorKey[$validatorKey][ColumnFeature::VALIDATOR])
-
                 $this->storage->add($user);
-                $counter++;
                 break;
             }
 

@@ -12,6 +12,8 @@ namespace App\Component;
 interface SortableInterface
 {
     public function setDataTable(array $table): SortableInterface;
+
     public function getWinner(): array;
+
     public function getWinnerByColumn(string $column, string $value): array;
 }
