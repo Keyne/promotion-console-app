@@ -32,13 +32,13 @@ After exporting a CSV file you can put it in the default directory for loading i
 ## <a name="run"></a>Running the console
 Before anything:
 
-```
+```shell
 $ composer install
 ```
 
 The console can be started with by running the PHP console file.
 
-```
+```shell
 $ php console app:start
 ```
 
@@ -70,7 +70,7 @@ $ php console app:start
 
 ## <a name="psr"></a>PSR-2
 The application is PSR-2 compliant and comes with an included Code sniffer
-```
+```shell
 $ vendor/bin/phpcs ./src --ignore=./src/AppKernel.php
 $ vendor/bin/phpcs ./tests --ignore=build
 ```
@@ -81,7 +81,7 @@ There's a significant amount of tests which prevents application from breaking d
 
 Open on your browser the following file to view the test coverage results: `tests/build/coverage/index.html`.
  
-```
+```shell
 $ vendor/bin/phpunit -c tests/phpunit.xml
 ```
 
