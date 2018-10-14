@@ -7,6 +7,12 @@ This will be used to insert new users on the JSON object, which is by default sa
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
 
 ## Running the console
+Before anything:
+
+```
+$ composer install
+```
+
 The console can be started with by running the PHP console file.
 
 ```
