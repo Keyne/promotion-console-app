@@ -1,10 +1,21 @@
-# Symfony Gift Promotion Console App
+# Symfony Gift Promotion Console App (Beta)
 This console application let you export your user's table in CSV format and choose a random winner of a given promotion.
 
 Under `/config/data-columns.php` you will be able set the columns and validators of your table (an default is already configured).
 This will be used to insert new users on the JSON object, which is by default saved in `/data/database.json`
 
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
+
+## Features included in this beta version
+- Interactive menu
+- Select default folder to load CSV files from
+- Load any number of CSV files
+- Input validation
+- Choose a random winner
+- Choose a random winner by country code
+- List users in JSON database
+- Add new users
+- Prevents duplicate IDs by updating entries with same ID
 
 ## Running the console
 Before anything:
