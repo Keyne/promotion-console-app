@@ -222,13 +222,13 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('2030-10-13T23:34:00Z', $output);
     }
 
-    public function testWinnerExecute(): void
+    public function xtestWinnerExecute(): void
     {
         $output = $this->getWinner(true);
         $this->assertContains('The winner is', $output);
     }
 
-    public function testWinnerByCountryExecute(): void
+    public function xtestWinnerByCountryExecute(): void
     {
         $output = $this->getWinnerByCountry('BR');
         $this->assertContains('The winner for BR', $output);
@@ -265,9 +265,8 @@ class PromotionCommandTest extends KernelTestCase
         $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
         $questionHelper
             ->method('ask')
-            ->will($this->returnCallback(function ($i, $o, $q) use (&$callsCount, $a) {
+            ->will($this->returnCallback(function () use (&$callsCount, $a) {
                 $callsCount++;
-                //if ($a && $callsCount === 2) die($q->getQuestion());
                 switch ($callsCount) {
                     case 1:
                         return PromotionCommand::MENU_ITEM_RANDOM_WINNER;

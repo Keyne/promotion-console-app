@@ -10,6 +10,7 @@ namespace App\Command\Step;
 
 use App\Component\Exception\AlertMessageException;
 use App\Component\Storage\StorageInterface;
+use App\Service\FileManagementServiceInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
@@ -36,19 +37,13 @@ class UserManagementStep extends AbstractStep
     ];
 
     /**
-     * @var array
+     * @var FileManagementServiceInterface
      */
-    private $formFields;
+    private $fileService;
 
-    /**
-     * @var StorageInterface
-     */
-    private $storage;
-
-    public function __construct(StorageInterface $storage, array $formFields)
+    public function __construct(FileManagementServiceInterface $fileManagementService)
     {
-        $this->storage = $storage;
-        $this->formFields = $formFields;
+        $this->fileService = $fileManagementService;
     }
 
     public function execute(): void
@@ -82,14 +77,14 @@ class UserManagementStep extends AbstractStep
         $table = new Table($this->getOutput());
         $table
             ->setHeaders(array('ID', 'FIRST NAME', 'EMAIL', 'COUNTRY', 'LATITUDE', 'LONGITUDE', 'JOINED AT'))
-            ->setRows($this->storage->getAll())
+            ->setRows($this->fileService->getRecords())
         ;
         $table->render();
     }
 
     private function runNewUserStep(): void
     {
-        $formStep = new FormStep($this->formFields, $this->storage);
+        $formStep = new FormStep($this->fileService->getConfig(), $this->fileService);
         $formStep
             ->setOutput($this->getOutput())
             ->setInput($this->getInput())

@@ -19,6 +19,7 @@ class Winner implements SortableInterface
 
     public function setDataTable(array $table): SortableInterface
     {
+        var_dump($table); exit;
         $this->dataTable = $table;
         return $this;
     }
@@ -42,7 +43,7 @@ class Winner implements SortableInterface
         }
 
         $winner = rand(0, $lastIndex);
-        return $table[$winner];
+        return $table ? $table[$winner] : $this->dataTable[$winner];
     }
 
     private function getFilteredTable(array $table, string $column, string $value): array

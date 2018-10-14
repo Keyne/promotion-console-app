@@ -8,6 +8,7 @@
 
 namespace App\Component\Csv;
 
+use App\Component\AppConfigInterface;
 use App\Component\Exception\AlertMessageException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -29,6 +30,16 @@ class CsvFinder implements CsvFinderInterface
      */
     private $files;
 
+    /**
+     * @var array
+     */
+    private $config;
+
+    public function __construct(array $config = null)
+    {
+        $this->config = $config;
+    }
+
     public function setCsvDir(string $dir): CsvFinderInterface
     {
         if (!is_dir($dir)) {
@@ -43,6 +54,9 @@ class CsvFinder implements CsvFinderInterface
 
     public function listFiles(): array
     {
+        if (!$this->filesystem) {
+            $this->setCsvDir($this->config[AppConfigInterface::DEFAULT_BASE_DIR]);
+        }
         $contents = $this->filesystem->listContents('/');
 
         $this->files = [];

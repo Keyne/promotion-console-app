@@ -11,6 +11,7 @@ namespace App\Command\Step;
 use App\Component\Exception\AlertMessageException;
 use App\Component\Storage\StorageInterface;
 use App\Component\Validator\StringValidatorInterface;
+use App\Service\FileManagementServiceInterface;
 use Symfony\Component\Console\Question\Question;
 use App\Component\DataColumnInterface as ColumnFeature;
 
@@ -25,12 +26,12 @@ class FormStep extends AbstractStep
     /**
      * @var StorageInterface
      */
-    private $storage;
+    private $fileService;
 
-    public function __construct(array $fields, StorageInterface $storage)
+    public function __construct(array $fields, FileManagementServiceInterface $fileManagementService)
     {
         $this->fields = $fields;
-        $this->storage = $storage;
+        $this->fileService = $fileManagementService;
     }
 
     public function execute(): void
@@ -74,8 +75,7 @@ class FormStep extends AbstractStep
                 }
             }
         }
-        $this->storage->addOrUpdate($inputs);
-        $this->storage->save();
+        $this->fileService->add($inputs);
         $this->getOutput()->writeln('#####################');
         $this->getOutput()->writeln('####### SAVED #######');
         $this->getOutput()->writeln('#####################');

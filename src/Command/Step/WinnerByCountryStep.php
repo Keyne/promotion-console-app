@@ -10,43 +10,41 @@ namespace App\Command\Step;
 
 use App\Component\Storage\StorageInterface;
 use App\Component\Winner;
+use App\Service\FileManagementServiceInterface;
+use App\Service\PromotionServiceInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class WinnerByCountryStep extends AbstractStep
 {
 
     /**
-     * @var StorageInterface
+     * @var FileManagementServiceInterface
      */
-    private $storage;
+    private $fileService;
 
-    public function __construct(StorageInterface $storage)
+    /**
+     * @var PromotionServiceInterface
+     */
+    private $promotionService;
+
+    public function __construct(FileManagementServiceInterface $fileService, PromotionServiceInterface $promotionService)
     {
-        $this->storage = $storage;
+        $this->fileService = $fileService;
+        $this->promotionService = $promotionService;
     }
 
     public function execute(): void
     {
-        $users = $this->storage->getAll();
-        $total = count($users);
-        if (!$total) {
-            throw new \LengthException('Users database is empty, please load a CSV file first');
-        }
-
-        $usersByCountry = [];
-        foreach ($users as $user) {
-            $usersByCountry[$user['country']][] = $user;
-        }
+        $countries = $this->promotionService->getColumnsDistinctValues('country');
 
         $question = new ChoiceQuestion(
             'Select the country: ',
-            array_keys($usersByCountry),
+            array_keys($countries),
             '0'
         );
 
         $countryCode = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
-
-        $countryTotal = count($usersByCountry[$countryCode]);
+        $countryTotal = count($countries);
 
         if (!$countryTotal) {
             $this->getOutput()->writeln('There\'s no users in this country');
@@ -69,11 +67,7 @@ class WinnerByCountryStep extends AbstractStep
 </question>                                                                                
         ");
 
-        $winner = new Winner();
-
-        $winner->setDataTable($users);
-
-        $winnerUser = $winner->getWinnerByColumn('country', $countryCode);
+        $winnerUser = $this->promotionService->getWinnerByColumn('country', $countryCode);
 
         $this->getOutput()->writeln("The winner for {$countryCode} is: {$winnerUser['first_name']} (id: {$winnerUser['id']})");
 

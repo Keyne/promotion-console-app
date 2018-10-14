@@ -22,6 +22,10 @@ use App\Component\Csv\CsvReaderInterface;
 use App\Component\Storage\StorageInterface;
 use App\Component\Storage\Storage;
 use App\Factory\Interfaces\CommandFactoryInterface;
+use App\Service\CsvManagerService;
+use App\Service\FileManagementServiceInterface;
+use App\Service\PromotionService;
+use App\Service\PromotionServiceInterface;
 use Symfony\Component\Console\Command\Command;
 
 class CommandFactory implements CommandFactoryInterface
@@ -32,6 +36,16 @@ class CommandFactory implements CommandFactoryInterface
     protected $storage;
 
     /**
+     * @var FileManagementServiceInterface
+     */
+    protected $fileService;
+
+    /**
+     * @var PromotionServiceInterface
+     */
+    protected $promotionService;
+
+    /**
      * @var array
      */
     protected $config;
@@ -40,6 +54,9 @@ class CommandFactory implements CommandFactoryInterface
     {
         $this->storage = $storage;
         $this->config = $config ?: include dirname(__FILE__) . '/../../config/config.php';
+        $this->createStorage();
+        $this->createFileManagerService();
+        $this->createPromotionService();
     }
 
     public function create(): Command
@@ -54,37 +71,46 @@ class CommandFactory implements CommandFactoryInterface
         return $command;
     }
 
-    protected function createFileChoiceStep(): CommandStepInterface
+    public function createFileManagerService(): FileManagementServiceInterface
     {
         $dataColumns = include(dirname(__FILE__) . "/../../config/data-columns.config.php");
-        ;
-        $step = new FileChoiceStep($dataColumns, $this->config[Config::DEFAULT_BASE_DIR], $this->createCsvFinder(), $this->createCsvReader(), $this->createStorage());
+
+        return $this->fileService = new CsvManagerService($dataColumns, $this->config[Config::DEFAULT_BASE_DIR], $this->createCsvFinder(), $this->createCsvReader(), $this->storage);
+    }
+
+    public function createPromotionService(): PromotionServiceInterface
+    {
+        return $this->promotionService = new PromotionService($this->fileService);
+    }
+
+    protected function createFileChoiceStep(): CommandStepInterface
+    {
+        $step = new FileChoiceStep($this->fileService);
         return $step;
     }
 
     protected function createWinnerStep(): CommandStepInterface
     {
-        $step = new WinnerStep($this->createStorage());
+        $step = new WinnerStep($this->fileService);
         return $step;
     }
 
     protected function createWinnerByCountryStep(): CommandStepInterface
     {
-        $step = new WinnerByCountryStep($this->createStorage());
+        $step = new WinnerByCountryStep($this->fileService, $this->promotionService);
         return $step;
     }
 
     protected function createUserManagementStep(): CommandStepInterface
     {
-        $dataColumns = include(dirname(__FILE__) . "/../../config/data-columns.config.php");
-        ;
-        $step = new UserManagementStep($this->createStorage(), $dataColumns);
+        $step = new UserManagementStep($this->fileService);
         return $step;
     }
 
     protected function createCsvFinder(): CsvFinderInterface
     {
-        $finder = new CsvFinder();
+        $config = include dirname(__FILE__) . '/../../config/config.php';
+        $finder = new CsvFinder($config);
         return $finder;
     }
 
