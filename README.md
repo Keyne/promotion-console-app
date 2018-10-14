@@ -44,6 +44,10 @@ $ vendor/bin/phpcs ./src --ignore=./src/AppKernel.php
 $ vendor/bin/phpcs ./tests --ignore=build
 ```
 
+## SOLID Principles
+
+This application has been built using SOLID principles with a dedicated domain layer which let the it grows as necessary
+
 ## Test coverage (PHPUnit)
 There's a significant amount of tests which prevents application from breaking during changes. Altough, this project has not been developed under TDD and thus the tests does't cover 100% yet.
 
