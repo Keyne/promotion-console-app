@@ -14,7 +14,7 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Interactve validation during CSV loading
 - Load any number of CSV files
 - Choose a random winner
-- Choose a random winner by country code
+- Choose a random winner by country code showing available codes (TODO: Let choose column for sorting)
 - List users in JSON database
 - Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
