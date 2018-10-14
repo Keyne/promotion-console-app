@@ -39,7 +39,7 @@ class WinnerByCountryStep extends AbstractStep
 
         $question = new ChoiceQuestion(
             'Select the country: ',
-            array_keys($countries),
+            $countries,
             '0'
         );
 
