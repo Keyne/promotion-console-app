@@ -19,7 +19,6 @@ class Winner implements SortableInterface
 
     public function setDataTable(array $table): SortableInterface
     {
-        var_dump($table); exit;
         $this->dataTable = $table;
         return $this;
     }
