@@ -78,7 +78,7 @@ $ vendor/bin/phpunit -c tests/phpunit.xml
 
 ## SOLID Principles
 
-This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API).
+This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` for the command line input/output.
 
 
 Symfony IoC has not been used altough a factory inteface is available:
