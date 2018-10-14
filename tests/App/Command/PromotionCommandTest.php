@@ -389,7 +389,7 @@ class PromotionCommandTest extends KernelTestCase
     }
 
 
-    function testFinish()
+    public function testFinish(): void
     {
         $storage = $this->buildStorage()->clear();
         $this->assertInstanceOf(StorageInterface::class, $storage);
