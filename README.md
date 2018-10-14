@@ -1,4 +1,12 @@
 # Symfony Gift Promotion Console App (Beta)
+
+- [Features](#features)
+- [Running](#run)
+- [Dependencies](#deps)
+- [PSR-2](#psr)
+- [Design principles](#patterns)
+- [CSV configuration sample](#samplecfg)
+
 This console application let you export your user's table in CSV format and choose a random winner of a given promotion.
 
 Under `/config/data-columns.config.php` you will be able set the columns and validators of your table (a default is already configured).
@@ -6,7 +14,7 @@ This will be used to insert new users on the JSON object, which is by default sa
 
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
 
-## Features included in this beta version
+## <a name="features"></a>Features included in this beta version
 
 - Configurable export table
 - Interactive menu
@@ -20,7 +28,7 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
 
-## Running the console
+## <a name="run"></a>Running the console
 Before anything:
 
 ```
@@ -33,12 +41,12 @@ The console can be started with by running the PHP console file.
 $ php console app:start
 ```
 
-## Requirements
+## <a name="reqs"></a>Requirements
 
 - php ^7.1
 - composer
 
-## Dependencies
+## <a name="deps"></a>Dependencies
 
 ```
     "require": {
@@ -59,14 +67,14 @@ $ php console app:start
     }
 ```    
 
-## PSR-2
+## <a name="psr"></a>PSR-2
 The application is PSR-2 compliant and comes with an included Code sniffer
 ```
 $ vendor/bin/phpcs ./src --ignore=./src/AppKernel.php
 $ vendor/bin/phpcs ./tests --ignore=build
 ```
 
-## Test coverage (PHPUnit)
+## <a name="tests"></a>Test coverage (PHPUnit)
 There's a significant amount of tests which prevents application from breaking during changes. Altough, this project has not been developed under TDD and thus the tests does't cover 100% yet.
 
 
@@ -76,7 +84,7 @@ Open on your browser the following file to view the test coverage results: `test
 $ vendor/bin/phpunit -c tests/phpunit.xml
 ```
 
-## SOLID Principles
+## <a name="patterns"></a>SOLID Principles
 
 This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` which implements it for the command line input/output.
 
@@ -245,7 +253,7 @@ class CommandFactory implements CommandFactoryInterface
 
 ```
 
-## Sample columns configuration
+## <a name="samplecfg"></a>Sample columns configuration
 
 ```
 <?php
