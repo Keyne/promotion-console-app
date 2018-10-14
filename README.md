@@ -78,7 +78,8 @@ $ vendor/bin/phpunit -c tests/phpunit.xml
 
 ## SOLID Principles
 
-This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary.
+This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API).
+
 
 Symfony IoC has not been used altough a factory inteface is available:
 
