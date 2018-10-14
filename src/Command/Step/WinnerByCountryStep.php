@@ -70,6 +70,7 @@ class WinnerByCountryStep extends AbstractStep
         ");
 
         $winner = new Winner();
+
         $winner->setDataTable($users);
         $winnerUser = $winner->getWinnerByColumn('country', $countryCode);
         $this->getOutput()->writeln("The winner for {$countryCode} is: {$winnerUser['first_name']} (id: {$winnerUser['id']})");
