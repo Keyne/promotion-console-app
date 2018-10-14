@@ -8,7 +8,7 @@
 
 namespace App\Command\Step;
 
-use App\Command\Exception\AlertMessageException;
+use App\Component\Exception\AlertMessageException;
 use App\Component\DataColumnInterface as ColumnFeature;
 use App\Component\Validator\EmailValidator;
 use App\Component\Csv\CsvFinderInterface;
@@ -73,19 +73,12 @@ class FileChoiceStep extends AbstractStep
 
     private function askDir(): void
     {
-        while (true) {
-            try {
-                $defaultDir = realpath($this->defaultBaseDir);
-                $question = new Question("Please enter the the directory in which CSV files are stored (default: {$defaultDir}): ", $defaultDir);
-                $dir = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
-                $this->getOutput()->writeln("Selected directory: {$dir}");
+        $defaultDir = realpath($this->defaultBaseDir);
+        $question = new Question("Please enter the the directory in which CSV files are stored (default: {$defaultDir}): ", $defaultDir);
+        $dir = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
+        $this->getOutput()->writeln("Selected directory: {$dir}");
 
-                $this->csvFinder->setCsvDir($dir);
-                break;
-            } catch (\InvalidArgumentException $e) {
-                $this->getOutput()->writeln($e->getMessage());
-            }
-        }
+        $this->csvFinder->setCsvDir($dir);
     }
 
     private function askFile(): void
@@ -93,7 +86,7 @@ class FileChoiceStep extends AbstractStep
         $files = $this->csvFinder->listFiles();
 
         if (!count($files)) {
-            throw new \InvalidArgumentException('You have provided a directory with no CSV files.');
+            throw new AlertMessageException('You have provided a directory with no CSV files.');
         }
 
         $question = new ChoiceQuestion(

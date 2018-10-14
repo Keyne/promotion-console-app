@@ -8,6 +8,7 @@
 
 namespace App\Command\Step;
 
+use App\Component\Exception\AlertMessageException;
 use App\Component\Storage\StorageInterface;
 use App\Component\Validator\StringValidatorInterface;
 use Symfony\Component\Console\Question\Question;
@@ -62,13 +63,13 @@ class FormStep extends AbstractStep
                      */
                     if (!empty($value)) {
                         if (($validator && !$validator->isValid($value))) {
-                            throw new \InvalidArgumentException('It looks like you\'ve typed a invalid value');
+                            throw new AlertMessageException('It looks like you\'ve typed a invalid value');
                         }
                         $inputs[$fieldName] = $value;
                         break;
                     }
                     $this->getOutput()->writeln('Please fill the field correctly');
-                } catch (\InvalidArgumentException $e) {
+                } catch (AlertMessageException $e) {
                     $this->getOutput()->writeln($e->getMessage());
                 }
             }

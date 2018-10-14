@@ -1,7 +1,7 @@
 <?php
 namespace App\Command;
 
-use App\Command\Exception\AlertMessageException;
+use App\Component\Exception\AlertMessageException;
 use App\Command\Step\CommandStepInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -145,7 +145,7 @@ class PromotionCommand extends Command
             }
         } catch (AlertMessageException $e) {
             $output->writeln($e->getMessage());
-        } catch (\Exception $e) {
+        } catch (\RuntimeException $e) {
             $output->writeln('Ops! Something when wrong: ' . $e->getMessage());
         }
 

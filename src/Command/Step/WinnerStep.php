@@ -8,6 +8,7 @@
 
 namespace App\Command\Step;
 
+use App\Component\Exception\AlertMessageException;
 use App\Component\Storage\StorageInterface;
 use App\Component\Winner;
 
@@ -29,7 +30,7 @@ class WinnerStep extends AbstractStep
         $users = $this->storage->getAll();
         $total = count($users);
         if (!$total) {
-            throw new \LengthException('Users database is empty, please load a CSV file first');
+            throw new AlertMessageException('Users database is empty, please load a CSV file first');
         }
 
         $this->getOutput()->writeln('

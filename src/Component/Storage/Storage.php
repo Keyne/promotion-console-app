@@ -8,6 +8,7 @@
 
 namespace App\Component\Storage;
 
+use App\Component\Exception\AlertMessageException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -61,7 +62,7 @@ class Storage implements StorageInterface
         if (isset($this->collection[$index])) {
             return $this->collection[$index];
         }
-        throw new \InvalidArgumentException('Record not found');
+        throw new AlertMessageException('Record not found');
     }
 
     public function getAll(): array

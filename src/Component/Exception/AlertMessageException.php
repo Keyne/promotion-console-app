@@ -6,7 +6,7 @@
  * Time: 19:54
  */
 
-namespace App\Command\Exception;
+namespace App\Component\Exception;
 
 class AlertMessageException extends \DomainException
 {

@@ -8,7 +8,7 @@
 
 namespace App\Component;
 
-use App\Command\Exception\AlertMessageException;
+use App\Component\Exception\AlertMessageException;
 
 class Winner implements SortableInterface
 {

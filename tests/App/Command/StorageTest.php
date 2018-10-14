@@ -2,17 +2,11 @@
 
 namespace Tests\Command;
 
-use App\Command\PromotionCommand;
-use App\Command\Step\UserManagementStep;
 use App\Component\AppConfigInterface;
+use App\Component\Exception\AlertMessageException;
 use App\Component\Storage\Storage;
 use App\Component\Storage\StorageInterface;
-use App\Factory\CommandFactory;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Tester\CommandTester;
 
 class StorageTest extends KernelTestCase
 {
@@ -20,11 +14,6 @@ class StorageTest extends KernelTestCase
      * @var array
      */
     private $config;
-
-    /**
-     * @var Application
-     */
-    private $application;
 
     /**
      * @var StorageInterface
@@ -68,8 +57,8 @@ class StorageTest extends KernelTestCase
 
         try {
             $storage->get(0);
-        } catch (\InvalidArgumentException $e) {
-            $this->assertInstanceOf(\InvalidArgumentException::class, $e);
+        } catch (AlertMessageException $e) {
+            $this->assertInstanceOf(AlertMessageException::class, $e);
         }
     }
     

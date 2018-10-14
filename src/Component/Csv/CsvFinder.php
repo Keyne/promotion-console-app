@@ -8,6 +8,7 @@
 
 namespace App\Component\Csv;
 
+use App\Component\Exception\AlertMessageException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 
@@ -31,7 +32,7 @@ class CsvFinder implements CsvFinderInterface
     public function setCsvDir(string $dir): CsvFinderInterface
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException('The provided directory doesn\'t exists');
+            throw new AlertMessageException('The provided directory doesn\'t exists');
         }
         $this->basedir = $dir;
         $adapter = new Local($dir);
