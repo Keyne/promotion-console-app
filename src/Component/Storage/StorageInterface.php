@@ -10,7 +10,7 @@ namespace App\Component\Storage;
 
 interface StorageInterface
 {
-    public function add(array $entry): StorageInterface;
+    public function addOrUpdate(array $entry): StorageInterface;
 
     public function get(int $index): array;
 
@@ -21,4 +21,6 @@ interface StorageInterface
     public function save(): StorageInterface;
 
     public function count(): int;
+
+    public function clear(): StorageInterface;
 }

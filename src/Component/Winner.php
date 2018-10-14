@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 class Winner implements SortableInterface
 {
     /**

@@ -8,7 +8,6 @@
 
 namespace App\Component;
 
-
 interface SortableInterface
 {
     public function setDataTable(array $table): SortableInterface;

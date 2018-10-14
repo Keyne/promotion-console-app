@@ -73,7 +73,7 @@ class FormStep extends AbstractStep
                 }
             }
         }
-        $this->storage->add($inputs);
+        $this->storage->addOrUpdate($inputs);
         $this->storage->save();
         $this->getOutput()->writeln('#####################');
         $this->getOutput()->writeln('####### SAVED #######');

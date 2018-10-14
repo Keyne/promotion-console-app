@@ -15,12 +15,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
  *
  * @package App\Command
  */
-class CsvParserCommand extends Command
+class PromotionCommand extends Command
 {
     const MENU_ITEM_LOAD_CSV = 'Load CSV file from directory';
     const MENU_ITEM_RANDOM_WINNER = 'Get promotion winner';
     const MENU_ITEM_RANDOM_WINNER_BY_COUNTRY = 'Get promotion winner by country';
     const MENU_USER_MANAGEMENT = 'User management';
+    const MENU_EXIT = 'Exit';
 
     const STEP_INPUT_FILE = 'fileSelectionStep';
     const STEP_WINNER = 'winnerStep';
@@ -32,6 +33,7 @@ class CsvParserCommand extends Command
         self::MENU_ITEM_RANDOM_WINNER,
         self::MENU_ITEM_RANDOM_WINNER_BY_COUNTRY,
         self::MENU_USER_MANAGEMENT,
+        self::MENU_EXIT,
     ];
 
     /**
@@ -62,25 +64,25 @@ class CsvParserCommand extends Command
         $this->setName('app:start');
     }
 
-    public function setFileSelectionStep(CommandStepInterface $fileSelectionStep): CsvParserCommand
+    public function setFileSelectionStep(CommandStepInterface $fileSelectionStep): PromotionCommand
     {
         $this->fileSelectionStep = $fileSelectionStep;
         return $this;
     }
 
-    public function setWinnerStep(CommandStepInterface $winnerStep): CsvParserCommand
+    public function setWinnerStep(CommandStepInterface $winnerStep): PromotionCommand
     {
         $this->winnerStep = $winnerStep;
         return $this;
     }
 
-    public function setWinnerByCountryStep(CommandStepInterface $winnerByCountryStep): CsvParserCommand
+    public function setWinnerByCountryStep(CommandStepInterface $winnerByCountryStep): PromotionCommand
     {
         $this->winnerByCountryStep = $winnerByCountryStep;
         return $this;
     }
 
-    public function setUserManagementStep(CommandStepInterface $userManagementStep): CsvParserCommand
+    public function setUserManagementStep(CommandStepInterface $userManagementStep): PromotionCommand
     {
         $this->userManagementStep = $userManagementStep;
         return $this;
@@ -134,6 +136,9 @@ class CsvParserCommand extends Command
                     break;
                 case self::MENU_USER_MANAGEMENT:
                     $this->runStep(self::STEP_USER_MANAGEMENT, $input, $output);
+                    break;
+                case self::MENU_EXIT:
+                    return false;
                     break;
             }
         } catch (AlertMessageException $e) {

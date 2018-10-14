@@ -26,19 +26,25 @@ class Storage implements StorageInterface
     /**
      * @var string
      */
-    private $databaseFile = 'database.json';
-
-    public function __construct()
-    {
-        $this->loadJsonFile();
-    }
+    private $baseDir = __DIR__ . '/../../../data/';
 
     /**
      * @var string
      */
-    private $baseDir = __DIR__ . '/../../../data/';
+    private $databaseFile = 'database.json';
 
-    public function add(array $entry): StorageInterface
+    public function __construct(string $baseDir = null, string $databaseFile = null)
+    {
+        if ($baseDir) {
+            $this->baseDir = $baseDir;
+        }
+        if ($databaseFile) {
+            $this->databaseFile = $databaseFile;
+        }
+        $this->loadJsonFile();
+    }
+
+    public function addOrUpdate(array $entry): StorageInterface
     {
         $id = array_search($entry['id'], array_column($this->collection, 'id'));
         if ($id !== false) {
@@ -93,5 +99,12 @@ class Storage implements StorageInterface
 
         $contents = $this->filesystem->read($this->databaseFile);
         $this->collection = $this->collection + json_decode($contents, true);
+    }
+
+    public function clear(): StorageInterface
+    {
+        $this->collection = [];
+        $this->filesystem->delete($this->databaseFile);
+        return $this;
     }
 }

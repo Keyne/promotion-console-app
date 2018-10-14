@@ -113,7 +113,7 @@ class FileChoiceStep extends AbstractStep
 
     private function askRetype(string $column, array $user): array
     {
-        $question = new Question("Please retype {$user['first_name']}'s data: \"{$user[$column]}\" looks invalid': ");
+        $question = new Question("Please retype {$user['first_name']}'s data, \"{$user[$column]}\" looks invalid': ");
         $user['email'] = $this->getQuestionHelper()->ask($this->getInput(), $this->getOutput(), $question);
 
         return $user;
@@ -126,7 +126,8 @@ class FileChoiceStep extends AbstractStep
         $counter = 0;
 
         foreach ($this->csvReader->getEntriesAsArray() as $k => $user) {
-            while(true) {
+            $counter++;
+            while (true) {
                 foreach ($user as $column => $value) {
                     $validatorKey = array_search($column, array_column($this->dataColumns, 'name'));
 
@@ -140,12 +141,10 @@ class FileChoiceStep extends AbstractStep
                             $user = $this->askRetype($column, $user);
                         }
                     }
-                    $counter++;
                 }
-                $this->storage->add($user);
+                $this->storage->addOrUpdate($user);
                 break;
             }
-
         }
         $this->getOutput()->writeln("{$counter} users processed");
         $this->storage->save();

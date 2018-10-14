@@ -1,6 +1,7 @@
 <?php
 namespace App\Component;
 
-interface AppConfigInterface {
+interface AppConfigInterface
+{
     const DEFAULT_BASE_DIR = 'defaultBaseDir';
 }
