@@ -8,13 +8,13 @@
 
 namespace App\Command\Step;
 
+use App\Command\Exception\AlertMessageException;
 use App\Component\DataColumnInterface as ColumnFeature;
 use App\Component\Validator\EmailValidator;
 use App\Component\Csv\CsvFinderInterface;
 use App\Component\Csv\CsvReaderInterface;
 use App\Component\Storage\StorageInterface;
 use App\Component\Validator\StringValidatorInterface;
-use EmailValidator\Validator;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
@@ -63,13 +63,9 @@ class FileChoiceStep extends AbstractStep
     public function execute(): void
     {
         do {
-            try {
-                $this->askDir();
-                $this->askFile();
-                break;
-            } catch (\InvalidArgumentException $e) {
-                $this->getOutput()->writeln($e->getMessage());
-            }
+            $this->askDir();
+            $this->askFile();
+            break;
         } while (true);
 
         $this->save();
@@ -153,21 +149,5 @@ class FileChoiceStep extends AbstractStep
         $this->getOutput()->writeln('#####################');
         $this->getOutput()->writeln('');
         $this->getOutput()->writeln('');
-    }
-
-    /**
-     * @return Validator
-     */
-    public function getEmailValidator(): Validator
-    {
-        return $this->emailValidator;
-    }
-
-    /**
-     * @param StringValidatorInterface $emailValidator
-     */
-    public function setEmailValidator(StringValidatorInterface $emailValidator)
-    {
-        $this->emailValidator = $emailValidator;
     }
 }

@@ -44,6 +44,7 @@ class StorageTest extends KernelTestCase
             return $this->storage;
         }
         $this->storage = $this->storage = new Storage($this->config[AppConfigInterface::DEFAULT_BASE_DIR], 'database.json');
+        $this->storage->clear();
         return $this->storage;
     }
 

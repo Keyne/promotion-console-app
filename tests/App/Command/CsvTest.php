@@ -77,6 +77,6 @@ class CsvTest extends KernelTestCase
         $users = $reader->getEntriesAsArray();
 
         $this->assertArrayHasKey(0, $users);
-        $this->assertContains('61480-137', $users[0]['id']);
+        $this->assertContains('59970-054', $users[0]['id']);
     }
 }

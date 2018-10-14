@@ -96,6 +96,7 @@ class PromotionCommandTest extends KernelTestCase
 
     public function testWinnerEmptyExecute(): void
     {
+        $this->buildStorage()->clear();
         $output = $this->getWinner();
         $this->assertContains($env = 'Ops! Something when wrong: Users database is empty, please load a CSV file first', $output);
     }
@@ -160,7 +161,7 @@ class PromotionCommandTest extends KernelTestCase
                 switch ($callsCount) {
                     case 1:
                         return PromotionCommand::MENU_ITEM_RANDOM_WINNER_BY_COUNTRY;
-                    case preg_match('/code/', $strQuestion) === 1:
+                    case preg_match('/Select the country/', $strQuestion) === 1:
                         return $code;
                     default:
                         return PromotionCommand::MENU_EXIT;
@@ -293,10 +294,10 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('The winner is', $output);
     }
 
-    public function xtestWinnerByCountryExecute(): void
+    public function testWinnerByCountryExecute(): void
     {
-        $output = $this->getWinnerByCountry();
-        $this->assertContains('The winner is', $output);
+        $output = $this->getWinnerByCountry('BR');
+        $this->assertContains('The winner for BR', $output);
     }
 
     public function xtestWrongMenuValue()
@@ -327,8 +328,27 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('Ops! There was a internal error.', $output);
     }
 
-    //TODO: Not finished
-    public function xtestLoadCsvExecute(): void
+
+    public function testLoadCsvExecute(string $dir = null): void
+    {
+        $output = $this->loadCsvExecute();
+        $this->assertContains('users processed', $output);
+        $this->assertContains('SAVED', $output);
+    }
+
+    public function testLoadCsvEmptyDirExecute(): void
+    {
+        $output = $this->loadCsvExecute('./');
+        $this->assertContains('You have provided a directory with', $output);
+    }
+
+    public function xtestLoadCsvWrongDirExecute(): void
+    {
+        $output = $this->loadCsvExecute('./asdf');
+        $this->assertContains('You have provided a directory with', $output);
+    }
+
+    public function loadCsvExecute(string $dir = null): string
     {
         $application = $this->buildApplication();
 
@@ -339,23 +359,25 @@ class PromotionCommandTest extends KernelTestCase
         $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
         $questionHelper
             ->method('ask')
-            ->will($this->returnCallback(function ($input, $output, Question $question) use (&$callsCount) {
+            ->will($this->returnCallback(function ($input, $output, Question $question) use (&$callsCount, $dir) {
                 $callsCount++;
-                //if ($callsCount == 5) die($callsCount . ' - ' . $question->getQuestion() . ': ' . $question->getDefault());
                 switch ($callsCount) {
                     case 1:
                         return PromotionCommand::MENU_ITEM_LOAD_CSV;
                     case 2:
+                        return $dir ?: $question->getDefault();
                     case 3:
-                    case 4:
-                        return $question->getDefault();
-                    //case preg_match('/Please retype .+\'s data, ".+" looks invalid:/', $question->getQuestion()):
-                        //return 'keyneviana@gmail.com';
+                        return 'data-sample.csv';
+                    case preg_match('/.*?Please retype.*?/', $question->getQuestion()) === 1:
+                        return 'keyneviana@gmail.com';
                     default:
                         return PromotionCommand::MENU_EXIT;
                 }
             }));
 
+        /**
+         * @var QuestionHelper $questionHelper
+         */
         $command->getHelperSet()->set($questionHelper, 'question');
 
         $commandTester->execute([
@@ -363,10 +385,7 @@ class PromotionCommandTest extends KernelTestCase
         ]);
 
         // the output of the command in the console
-        $output = $commandTester->getDisplay();
-
-        $this->assertContains('960 users processed', $output);
-        $this->assertContains('SAVED', $output);
+        return $commandTester->getDisplay();
     }
 
 

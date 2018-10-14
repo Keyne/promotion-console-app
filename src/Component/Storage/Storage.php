@@ -104,7 +104,9 @@ class Storage implements StorageInterface
     public function clear(): StorageInterface
     {
         $this->collection = [];
-        $this->filesystem->delete($this->databaseFile);
+        if ($this->filesystem->has($this->databaseFile)) {
+            $this->filesystem->delete($this->databaseFile);
+        }
         return $this;
     }
 }
