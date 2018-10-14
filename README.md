@@ -13,11 +13,10 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Select default folder to load CSV files from
 - Interactve validation during CSV loading
 - Load any number of CSV files
-- Input validation
 - Choose a random winner
 - Choose a random winner by country code
 - List users in JSON database
-- Add new users
+- Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
 
 ## Running the console
