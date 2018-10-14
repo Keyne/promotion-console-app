@@ -78,7 +78,28 @@ $ vendor/bin/phpunit -c tests/phpunit.xml
 
 ## SOLID Principles
 
-This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` for the command line input/output.
+This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` which implements it for the command line input/output.
+
+```
+namespace App\Command\Step;
+
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+interface CommandStepInterface
+{
+    public function execute(): void;
+
+    public function setInput(InputInterface $input): CommandStepInterface;
+
+    public function setOutput(OutputInterface $output): CommandStepInterface;
+
+    public function setQuestionHelper(QuestionHelper $helper): CommandStepInterface;
+}
+```
+
+
 
 
 Symfony IoC has not been used altough a factory inteface is available:
