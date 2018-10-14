@@ -8,6 +8,8 @@
 
 namespace App\Component;
 
+use App\Command\Exception\AlertMessageException;
+
 class Winner implements SortableInterface
 {
     /**
@@ -35,8 +37,8 @@ class Winner implements SortableInterface
     private function getRandom(array $table): array
     {
         $lastIndex = count($table) -1;
-        if ($lastIndex <= 0) {
-            throw new \RuntimeException('T');
+        if (count($table) === 0) {
+            throw new AlertMessageException('No users found');
         }
 
         $winner = rand(0, $lastIndex);

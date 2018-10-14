@@ -94,45 +94,15 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('CONSOLE CSV SORTABLE', $output);
     }
 
-    public function testWinnerExecute(): void
+    public function testWinnerEmptyExecute(): void
     {
-        $application = $this->buildApplication();
-        $command = $application->find('app:start');
-        $commandTester = new CommandTester($command);
-
-        $callsCount = 0;
-        $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
-        $questionHelper
-            ->method('ask')
-            ->will($this->returnCallback(function () use (&$callsCount) {
-                $callsCount++;
-                switch ($callsCount) {
-                    case 1:
-                        return PromotionCommand::MENU_ITEM_RANDOM_WINNER;
-                    default:
-                        return PromotionCommand::MENU_EXIT;
-                }
-            }));
-
-        /**
-         * @var QuestionHelper $questionHelper
-         */
-        $command->getHelperSet()->set($questionHelper, 'question');
-
-        $commandTester->execute([
-            'command' => $command->getName()
-        ]);
-
-        // the output of the command in the console
-        $output = $commandTester->getDisplay();
-
+        $output = $this->getWinner();
         $this->assertContains($env = 'Ops! Something when wrong: Users database is empty, please load a CSV file first', $output);
     }
 
-    public function testWinnerByCountryExecute(): void
+    public function getWinner($a = null)
     {
         $application = $this->buildApplication();
-
         $command = $application->find('app:start');
         $commandTester = new CommandTester($command);
 
@@ -140,11 +110,14 @@ class PromotionCommandTest extends KernelTestCase
         $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
         $questionHelper
             ->method('ask')
-            ->will($this->returnCallback(function () use (&$callsCount) {
+            ->will($this->returnCallback(function ($i, $o, $q) use (&$callsCount, $a) {
                 $callsCount++;
+                //if ($a && $callsCount === 2) die($q->getQuestion());
                 switch ($callsCount) {
                     case 1:
-                        return PromotionCommand::MENU_ITEM_RANDOM_WINNER_BY_COUNTRY;
+                        return PromotionCommand::MENU_ITEM_RANDOM_WINNER;
+                    case 2:
+                        return true;
                     default:
                         return PromotionCommand::MENU_EXIT;
                 }
@@ -160,9 +133,51 @@ class PromotionCommandTest extends KernelTestCase
         ]);
 
         // the output of the command in the console
-        $output = $commandTester->getDisplay();
+        return $commandTester->getDisplay();
+    }
+
+    public function testWinnerByCountryEmptyExecute(): void
+    {
+        $output = $this->getWinnerByCountry();
 
         $this->assertContains('Users database is empty, please load a CSV file first', $output);
+    }
+
+    public function getWinnerByCountry(string $code = null)
+    {
+        $application = $this->buildApplication();
+
+        $command = $application->find('app:start');
+        $commandTester = new CommandTester($command);
+
+        $callsCount = 0;
+        $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
+        $questionHelper
+            ->method('ask')
+            ->will($this->returnCallback(function ($input, $output, Question $question) use (&$callsCount, $code) {
+                $callsCount++;
+                $strQuestion = $question->getQuestion();
+                switch ($callsCount) {
+                    case 1:
+                        return PromotionCommand::MENU_ITEM_RANDOM_WINNER_BY_COUNTRY;
+                    case preg_match('/code/', $strQuestion) === 1:
+                        return $code;
+                    default:
+                        return PromotionCommand::MENU_EXIT;
+                }
+            }));
+
+        /**
+         * @var QuestionHelper $questionHelper
+         */
+        $command->getHelperSet()->set($questionHelper, 'question');
+
+        $commandTester->execute([
+            'command' => $command->getName()
+        ]);
+
+        // the output of the command in the console
+        return $commandTester->getDisplay();
     }
 
     public function testUserManagementExecute(): void
@@ -237,8 +252,9 @@ class PromotionCommandTest extends KernelTestCase
         $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
         $questionHelper
             ->method('ask')
-            ->will($this->returnCallback(function () use (&$callsCount) {
+            ->will($this->returnCallback(function ($i, $o, $q) use (&$callsCount) {
                 $callsCount++;
+
                 switch ($callsCount) {
                     case 1:
                         return PromotionCommand::MENU_USER_MANAGEMENT;
@@ -248,8 +264,6 @@ class PromotionCommandTest extends KernelTestCase
                         return UserManagementStep::MENU_BACK;
                     case 4:
                         return false;
-                    default:
-                        return PromotionCommand::MENU_EXIT;
                 }
             }));
 
@@ -273,8 +287,48 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('2030-10-13T23:34:00Z', $output);
     }
 
-    /*
-    public function testLoadCsvExecute(): void
+    public function testWinnerExecute(): void
+    {
+        $output = $this->getWinner(true);
+        $this->assertContains('The winner is', $output);
+    }
+
+    public function xtestWinnerByCountryExecute(): void
+    {
+        $output = $this->getWinnerByCountry();
+        $this->assertContains('The winner is', $output);
+    }
+
+    public function xtestWrongMenuValue()
+    {
+        $application = $this->buildApplication();
+        $command = $application->find('app:start');
+        $commandTester = new CommandTester($command);
+
+        $callsCount = 0;
+        $questionHelper = $this->getMockBuilder(QuestionHelper::class)->getMock();
+        $questionHelper
+            ->method('ask')
+            ->will($this->returnCallback(function () use (&$callsCount) {
+                return 'wrong';
+            }));
+
+        /**
+         * @var QuestionHelper $questionHelper
+         */
+        $command->getHelperSet()->set($questionHelper, 'question');
+
+        $commandTester->execute([
+            'command' => $command->getName()
+        ]);
+
+        $output = $commandTester->getDisplay();
+
+        $this->assertContains('Ops! There was a internal error.', $output);
+    }
+
+    //TODO: Not finished
+    public function xtestLoadCsvExecute(): void
     {
         $application = $this->buildApplication();
 
@@ -314,7 +368,7 @@ class PromotionCommandTest extends KernelTestCase
         $this->assertContains('960 users processed', $output);
         $this->assertContains('SAVED', $output);
     }
-    */
+
 
     function testFinish()
     {

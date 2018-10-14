@@ -140,6 +140,8 @@ class PromotionCommand extends Command
                 case self::MENU_EXIT:
                     return false;
                     break;
+                default:
+                    throw new \Exception('Unexpected error');
             }
         } catch (AlertMessageException $e) {
             $output->writeln($e->getMessage());
