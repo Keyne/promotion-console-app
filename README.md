@@ -40,7 +40,9 @@ $ vendor/bin/phpcs ./tests
 ```
 
 ## Test coverage (PHPUnit)
-There's a significant amount of tests which prevents application from breaking during changes.
+There's a significant amount of tests which prevents application from breaking during changes. Altough, this project has not been developed under TDD and thus the tests does't cover 100% yet.
+
+
 Open on your browser the following file to view the test coverage results: `testes/build/coverage/index.html`,
 but before run the tests cases:
  
