@@ -7,6 +7,8 @@ This will be used to insert new users on the JSON object, which is by default sa
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
 
 ## Features included in this beta version
+
+- Configurable export table
 - Interactive menu
 - Select default folder to load CSV files from
 - Load any number of CSV files
