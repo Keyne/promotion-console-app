@@ -2,7 +2,7 @@
 This console application let you export your user's table in CSV format and choose a random winner of a given promotion.
 
 Under `/config/data-columns.config.php` you will be able set the columns and validators of your table (a default is already configured).
-This will be used to insert new users on the JSON object, which is by default saved in `/data/database.json`
+This will be used to insert new users on the JSON object, which is by default saved in `/data/database.json`. It will also validate CSV data during the parsing.
 
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
 
