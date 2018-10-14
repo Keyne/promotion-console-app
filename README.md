@@ -33,7 +33,7 @@ $ php console app:start
 ## PSR-2
 The application is PSR-2 compliant and comes with an included Code sniffer
 ```
-$ vendor/bin/phpcs ./src
+$ vendor/bin/phpcs ./src --ignore=./src/AppKernel.php
 $ vendor/bin/phpcs ./tests
 ```
 
