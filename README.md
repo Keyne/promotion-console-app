@@ -11,6 +11,7 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Configurable export table
 - Interactive menu
 - Select default folder to load CSV files from
+- Interactve validation during CSV loading
 - Load any number of CSV files
 - Input validation
 - Choose a random winner
