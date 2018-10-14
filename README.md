@@ -20,11 +20,6 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
 
-## Requirements
-
-- php ^7.1
-- composer
-
 ## Running the console
 Before anything:
 
@@ -37,6 +32,32 @@ The console can be started with by running the PHP console file.
 ```
 $ php console app:start
 ```
+
+## Requirements
+
+- php ^7.1
+- composer
+
+## Dependencies
+
+```
+    "require": {
+        "symfony/console": "^4.1",
+        "league/flysystem": "^1.0",
+        "league/csv": "^9.1",
+        "nojacko/email-validator": "~1.0"
+    }
+```
+
+```
+    "require-dev": {
+        "php": "^7.1.13",
+        "squizlabs/php_codesniffer": "^3.3",
+        "phpunit/phpunit": "^6.5",
+        "symfony/phpunit-bridge": "*",
+        "blast-project/tests-bundle": "^0.6.4"
+    }
+```    
 
 ## PSR-2
 The application is PSR-2 compliant and comes with an included Code sniffer
