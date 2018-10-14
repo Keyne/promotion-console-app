@@ -19,6 +19,11 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
 
+## Requirements
+
+- php ^7.1
+- composer
+
 ## Running the console
 Before anything:
 
