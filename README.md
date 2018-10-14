@@ -4,6 +4,7 @@
 - [Running](#run)
 - [Dependencies](#deps)
 - [PSR-2](#psr)
+- [Tests](#tests)
 - [Design principles](#patterns)
 - [CSV configuration sample](#samplecfg)
 
