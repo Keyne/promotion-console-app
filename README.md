@@ -89,7 +89,7 @@ $ vendor/bin/phpunit -c tests/phpunit.xml
 
 This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` which implements it for the command line input/output.
 
-```
+```php
 namespace App\Command\Step;
 
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -113,7 +113,7 @@ interface CommandStepInterface
 
 Symfony IoC has not been used altough a factory inteface is available:
 
-```
+```php
 namespace App\Factory\Interfaces;
 
 use Symfony\Component\Console\Command\Command;
@@ -127,7 +127,7 @@ interface CommandFactoryInterface
 
 This is the basic application wiring:
 
-```
+```php
 namespace App\Factory;
 
 use App\Command\PromotionCommand;
@@ -256,7 +256,7 @@ class CommandFactory implements CommandFactoryInterface
 
 ## <a name="samplecfg"></a>Sample columns configuration
 
-```
+```php
 <?php
   
 use \App\Component\Validator\RegexValidator;
