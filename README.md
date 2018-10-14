@@ -105,14 +105,6 @@ interface CommandStepInterface
 Symfony IoC has not been used altough a factory inteface is available:
 
 ```
-<?php
-/**
- * Created by PhpStorm.
- * User: Keyne
- * Date: 11/10/2018
- * Time: 21:14
- */
-
 namespace App\Factory\Interfaces;
 
 use Symfony\Component\Console\Command\Command;
@@ -127,14 +119,6 @@ interface CommandFactoryInterface
 This is the basic application wiring:
 
 ```
-<?php
-/**
- * Created by PhpStorm.
- * User: Keyne
- * Date: 11/10/2018
- * Time: 21:13
- */
-
 namespace App\Factory;
 
 use App\Command\PromotionCommand;
