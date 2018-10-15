@@ -8,8 +8,6 @@
 
 namespace App\Command\Step;
 
-use App\Component\Storage\StorageInterface;
-use App\Component\Winner;
 use App\Service\FileManagementServiceInterface;
 use App\Service\PromotionServiceInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;

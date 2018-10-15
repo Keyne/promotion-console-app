@@ -10,9 +10,6 @@ namespace App\Service;
 
 
 use App\Component\Csv\CsvFinderInterface;
-use App\Component\Csv\CsvReaderInterface;
-use App\Component\Storage\StorageInterface;
-use App\Component\Validator\StringValidatorInterface;
 use App\Component\Winner;
 
 class PromotionService implements PromotionServiceInterface

@@ -9,7 +9,6 @@
 namespace App\Command\Step;
 
 use App\Component\Exception\AlertMessageException;
-use App\Component\Storage\StorageInterface;
 use App\Service\FileManagementServiceInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Question\ChoiceQuestion;

@@ -9,7 +9,6 @@
 namespace App\Command\Step;
 
 use App\Component\Exception\AlertMessageException;
-use App\Component\Storage\StorageInterface;
 use App\Component\Winner;
 use App\Service\FileManagementServiceInterface;
 
