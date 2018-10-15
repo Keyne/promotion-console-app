@@ -1,4 +1,13 @@
 # Symfony Gift Promotion Console App (Beta)
+
+- [Features](#features)
+- [Running](#run)
+- [Dependencies](#deps)
+- [PSR-2](#psr)
+- [Tests](#tests)
+- [Design principles](#patterns)
+- [CSV configuration sample](#samplecfg)
+
 This console application let you export your user's table in CSV format and choose a random winner of a given promotion.
 
 Under `/config/data-columns.config.php` you will be able set the columns and validators of your table (a default is already configured).
@@ -6,7 +15,7 @@ This will be used to insert new users on the JSON object, which is by default sa
 
 After exporting a CSV file you can put it in the default directory for loading in the console app: `/data` 
 
-## Features included in this beta version
+## <a name="features"></a>Features included in this beta version
 
 - Configurable export table
 - Interactive menu
@@ -20,56 +29,91 @@ After exporting a CSV file you can put it in the default directory for loading i
 - Add new users (with input validation)
 - Prevents duplicate IDs by updating entries with same ID
 
-## Requirements
-
-- php ^7.1
-- composer
-
-## Running the console
+## <a name="run"></a>Running the console
 Before anything:
 
-```
+```shell
 $ composer install
 ```
 
 The console can be started with by running the PHP console file.
 
-```
+```shell
 $ php console app:start
 ```
 
-## PSR-2
-The application is PSR-2 compliant and comes with an included Code sniffer
+## <a name="reqs"></a>Requirements
+
+- php ^7.1
+- composer
+
+## <a name="deps"></a>Dependencies
+
 ```
+    "require": {
+        "symfony/console": "^4.1",
+        "league/flysystem": "^1.0",
+        "league/csv": "^9.1",
+        "nojacko/email-validator": "~1.0"
+    }
+```
+
+```
+    "require-dev": {
+        "php": "^7.1.13",
+        "squizlabs/php_codesniffer": "^3.3",
+        "phpunit/phpunit": "^6.5",
+        "symfony/phpunit-bridge": "*",
+        "blast-project/tests-bundle": "^0.6.4"
+    }
+```    
+
+## <a name="psr"></a>PSR-2
+The application is PSR-2 compliant and comes with an included Code sniffer
+```shell
 $ vendor/bin/phpcs ./src --ignore=./src/AppKernel.php
 $ vendor/bin/phpcs ./tests --ignore=build
 ```
 
-## Test coverage (PHPUnit)
+## <a name="tests"></a>Test coverage (PHPUnit)
 There's a significant amount of tests which prevents application from breaking during changes. Altough, this project has not been developed under TDD and thus the tests does't cover 100% yet.
 
 
 Open on your browser the following file to view the test coverage results: `tests/build/coverage/index.html`.
  
-```
+```shell
 $ vendor/bin/phpunit -c tests/phpunit.xml
 ```
 
-## SOLID Principles
+## <a name="patterns"></a>SOLID Principles
 
-This application has been built using SOLID principles with a dedicated domain layer which let the it grows as necessary
+This application has been built using SOLID principles with a dedicated domain layer which let it grows as necessary (i.e. adding a brownser/mobile front-end app or a REST API). The Data Access Layer can also be changed easily to, for example, mongodb. A dedicated component for sorting winners can be extended for better sorting algorithms. Finally, each menu item has simple inteface `CommandStepInterface` and `FormStep` which implements it for the command line input/output.
 
-Symfony IoC has not been used altough a factory inteface is available
+```php
+namespace App\Command\Step;
 
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+interface CommandStepInterface
+{
+    public function execute(): void;
+
+    public function setInput(InputInterface $input): CommandStepInterface;
+
+    public function setOutput(OutputInterface $output): CommandStepInterface;
+
+    public function setQuestionHelper(QuestionHelper $helper): CommandStepInterface;
+}
 ```
-<?php
-/**
- * Created by PhpStorm.
- * User: Keyne
- * Date: 11/10/2018
- * Time: 21:14
- */
 
+
+
+
+Symfony IoC has not been used altough a factory inteface is available:
+
+```php
 namespace App\Factory\Interfaces;
 
 use Symfony\Component\Console\Command\Command;
@@ -83,15 +127,7 @@ interface CommandFactoryInterface
 
 This is the basic application wiring:
 
-```
-<?php
-/**
- * Created by PhpStorm.
- * User: Keyne
- * Date: 11/10/2018
- * Time: 21:13
- */
-
+```php
 namespace App\Factory;
 
 use App\Command\PromotionCommand;
@@ -218,9 +254,9 @@ class CommandFactory implements CommandFactoryInterface
 
 ```
 
-## Sample columns configuration
+## <a name="samplecfg"></a>Sample columns configuration
 
-```
+```php
 <?php
   
 use \App\Component\Validator\RegexValidator;
