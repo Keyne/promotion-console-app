@@ -8,7 +8,6 @@
 
 namespace App\Service;
 
-
 use App\Component\Csv\CsvFinderInterface;
 use App\Component\Winner;
 
